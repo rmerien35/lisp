@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>Compilation</title>
+</head>
+
+<body text="#000000">
+
+<font color=#000000 face=VERDANA>
+<img src="../images/compilation.gif"><br/>
+<p/>
+Référence :<br/>
+Compilateurs, principes, techniques et outils (A.V. Aho, R. Sethi et J.D. Ullman - InterEditions).<br/>
+<p/>
+
+<b>Interpreteur LISP (LIST Processing) :</b><br/>
+<p/>
+La grammaire de l'interpreteur LISP (au format GBF) :<br/>
+<p/>
+
+<pre>
+{ Grammaire d'un Interpreteur LISP }
+
+{
+%1: new(expr);
+    pointeur^.ptr_arriere:=nil;
+    pointeur:=expr;
+
+%2: pointeur^.type_liste:=true;
+    new(pointeur^.debut);
+    new(pointeur^.suite);
+
+%3: pointeur^.type_liste:=false;
+    pointeur^.atome:=CHAINE;
+
+%4: tampon:=pointeur;
+    pointeur:=pointeur^.debut;
+    pointeur^.ptr_arriere:=tampon;
+
+%5: tampon:=pointeur;
+    pointeur:=pointeur^.suite;
+    pointeur^.ptr_arriere:=tampon;
+
+%6: pointeur^.suite:=nil;
+
+%7: pointeur:=pointeur^.ptr_arriere;
+
+%8: writeln( EVAL(expr,l_ass) );
+}
+
+{ Prog est une Sexpr primitive }
+Prog   =  Sexpr %1  Suite_Prog ;
+
+Suite_Prog  = Prog %8
+            | 'Vide' ;
+
+Sexpr  =  Liste
+       |  Atome ;
+
+Liste  =  '(' Sexpr %2 %4  Suite_Liste ')' %7 ;
+
+Suite_Liste = 'Vide' Production %6
+            | Sexpr %5 %2 %4  Suite_Liste Production %7 ;
+
+Atome  =  'ID' %3 %7 ;
+
+Production  =  'Vide' ;
+</pre>
+
+Le programme de démonstration test.lisp :<br/>
+<p/>
+<pre>
+{ factorielle recursive }
+
+(define fact
+  (lambda (n)
+    (cond
+         ((= n 0)   1)
+         (t         (* n (fact (- n 1)))) )))
+
+(fact 5)
+
+{ fonction produit }
+
+(define produit
+   (lambda (x y) (* x y) ))
+
+(produit 4 5)
+</pre>
+
+<p/>
+Sources et code de l'interpréteur LISP : <a href="lisp.zip">lisp.zip</a>.<br/>
+<p/>
+
+</font>
+</body>
+</html>

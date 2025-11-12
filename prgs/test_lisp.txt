@@ -1,0 +1,16 @@
+{ factorielle recursive }
+
+(define fact
+  (lambda (n)
+    (cond
+         ((= n 0)   1)
+         (t         (* n (fact (- n 1)))) )))
+
+(fact 5)
+
+{ fonction produit }
+
+(define produit
+   (lambda (x y) (* x y) ))
+
+(produit 4 5)
